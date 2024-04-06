@@ -10,10 +10,12 @@ class Program
         // Generar matriz
         char[,] matriz = GenerarMatriz(codigo);
 
-        Console.WriteLine($"Tamaño de la matriz: {matriz.GetLength(0)} filas x {matriz.GetLength(1)} columnas");
+        Console.WriteLine($"Codigo: {matriz.GetLength(0)} filas x {matriz.GetLength(1)} columnas");
 
         // Mostrar la matriz
         MostrarMatriz(matriz);
+
+        Console.WriteLine($"Cuadruplos");
 
         // Generar cuádruplos
         GenerarCuadruplos(matriz);
@@ -136,7 +138,7 @@ class Program
                 else if (currentChar == '|')
                 {
                     // Imprimir el cuádruplo
-                    Console.WriteLine($"|   {instrCount++}   |   GF   |  T{tempCount - 1}  |      |   {instrCount}  |");
+                    Console.WriteLine($"|   {instrCount++}   |   GF   |  T{tempCount - 1}  |      |    |");
                 }
             }
         }
