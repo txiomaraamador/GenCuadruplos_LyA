@@ -7,6 +7,17 @@ class Program
         // Código proporcionado
         string codigo = "IF	y<>c	then\n\tIF	a>b	then\n\t\tIF	c>d	then\n\t\t\ty=y+1\n\t\t\tA=a+b\n\t\t\tc=d+1";
 
+        // Generar matriz
+        char[,] matriz = GenerarMatriz(codigo);
+
+        Console.WriteLine($"Tamaño de la matriz: {matriz.GetLength(0)} filas x {matriz.GetLength(1)} columnas");
+
+        // Mostrar la matriz
+        MostrarMatriz(matriz);
+    }
+
+    static char[,] GenerarMatriz(string codigo)
+    {
         // Separar el código por saltos de línea
         string[] lineasCodigo = codigo.Split('\n');
 
@@ -48,8 +59,11 @@ class Program
             }
         }
 
-        Console.WriteLine($"Tamaño de la matriz: {matriz.GetLength(0)} filas x {matriz.GetLength(1)} columnas");
+        return matriz;
+    }
 
+    static void MostrarMatriz(char[,] matriz)
+    {
         // Mostrar la matriz
         for (int i = 0; i < matriz.GetLength(0); i++)
         {
@@ -61,5 +75,4 @@ class Program
         }
     }
 }
-
 
