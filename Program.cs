@@ -5,7 +5,7 @@ class Program
     static void Main(string[] args)
     {
         // Código proporcionado
-        string codigo = "IF	y<>c	then\n\tIF	a>b	then\n\t\tIF	c>d	then\n\t\t\ty=y+1\n\t\t\tA=a+b\n\t\t\tc=d+1";
+        string codigo = "IF	y<c	then\n\tIF	a>b	then\n\t\tIF	c>d	then\n\t\t\ty=y+1\n\t\t\tA=a+b\n\t\t\tc=d+1";
 
         // Generar matriz
         char[,] matriz = GenerarMatriz(codigo);
@@ -14,6 +14,9 @@ class Program
 
         // Mostrar la matriz
         MostrarMatriz(matriz);
+
+        // Generar cuádruplos
+        GenerarCuadruplos(matriz);
     }
 
     static char[,] GenerarMatriz(string codigo)
@@ -72,6 +75,70 @@ class Program
                 Console.Write(matriz[i, j]);
             }
             Console.WriteLine(); // Agregar salto de línea después de cada fila
+        }
+    }
+
+    static void GenerarCuadruplos(char[,] matriz)
+    {
+        int tempCount = 1;
+        int instrCount = 0;
+        char[] operadores = { '=', '<', '>', '+' };
+
+        for (int i = 0; i < matriz.GetLength(0); i++)
+        {
+            for (int j = 0; j < matriz.GetLength(1); j++)
+            {
+                char currentChar = matriz[i, j];
+
+                // Si encontramos un IF
+                if (currentChar == '¿')
+                {
+                    // Buscar el siguiente operador matemático
+                    char operador = ' ';
+                    char primerOperando = ' ';
+                    char segundoOperando = ' ';
+                    int temp = tempCount;
+
+                    for (int k = j + 1; k < matriz.GetLength(1); k++)
+                    {
+                        if (Array.Exists(operadores, element => element == matriz[i, k]))
+                        {
+                            operador = matriz[i, k];
+                            // Buscar el primer operando
+                            for (int l = k - 1; l >= 0; l--)
+                            {
+                                if (matriz[i, l] != ' ' && matriz[i, l] != '\t')
+                                {
+                                    primerOperando = matriz[i, l];
+                                    break;
+                                }
+                            }
+                            // Buscar el segundo operando
+                            for (int l = k + 1; l < matriz.GetLength(1); l++)
+                            {
+                                if (matriz[i, l] != ' ' && matriz[i, l] != '\t')
+                                {
+                                    segundoOperando = matriz[i, l];
+                                    break;
+                                }
+                            }
+                            break;
+                        }
+                    }
+
+                    // Imprimir el cuádruplo
+                    Console.WriteLine($"|   {instrCount++}   |   {operador}   |   {primerOperando}  |  {segundoOperando}  |  T{temp}  |");
+
+                    // Incrementar el contador de temporales
+                    tempCount++;
+                }
+                // Si encontramos un THEN
+                else if (currentChar == '|')
+                {
+                    // Imprimir el cuádruplo
+                    Console.WriteLine($"|   {instrCount++}   |   GF   |  T{tempCount - 1}  |      |   {instrCount}  |");
+                }
+            }
         }
     }
 }
