@@ -84,7 +84,7 @@ class Program
     {
         int tempCount = 1;
         int instrCount = 0;
-        char[] operadores = { '=', '<', '>', '+' };
+        char[] operadores = { '=', '<', '>', '+', '-', '*', '/', '&' };
 
         for (int i = 0; i < matriz.GetLength(0); i++)
         {
@@ -92,56 +92,84 @@ class Program
             {
                 char currentChar = matriz[i, j];
 
-                // Si encontramos un IF
-                if (currentChar == '¿')
+                // Si encontramos un primer operando
+                if ((currentChar >= 'a' && currentChar <= 'z') || (currentChar >= 'A' && currentChar <= 'Z'))
                 {
-                    // Buscar el siguiente operador matemático
+                    char primerOperando = currentChar;
                     char operador = ' ';
-                    char primerOperando = ' ';
-                    char segundoOperando = ' ';
-                    int temp = tempCount;
+                    char segundoOperador = ' ';
+                    char tercerOperando = ' ';
 
                     for (int k = j + 1; k < matriz.GetLength(1); k++)
                     {
                         if (Array.Exists(operadores, element => element == matriz[i, k]))
                         {
                             operador = matriz[i, k];
-                            // Buscar el primer operando
-                            for (int l = k - 1; l >= 0; l--)
-                            {
-                                if (matriz[i, l] != ' ' && matriz[i, l] != '\t')
-                                {
-                                    primerOperando = matriz[i, l];
-                                    break;
-                                }
-                            }
                             // Buscar el segundo operando
+                            char segundoOperando = ' ';
                             for (int l = k + 1; l < matriz.GetLength(1); l++)
                             {
-                                if (matriz[i, l] != ' ' && matriz[i, l] != '\t')
+                                if ((matriz[i, l] >= 'a' && matriz[i, l] <= 'z') || (matriz[i, l] >= 'A' && matriz[i, l] <= 'Z'))
                                 {
                                     segundoOperando = matriz[i, l];
+                                    // Buscar el tercer operando
+                                    for (int m = l + 1; m < matriz.GetLength(1); m++)
+                                    {
+                                        if (char.IsLetterOrDigit(matriz[i, m]))
+                                        {
+                                            tercerOperando = matriz[i, m];
+                                            break;
+                                        }
+                                    }
                                     break;
                                 }
                             }
+                            for (int l = k + 1; l < matriz.GetLength(1); l++)
+                            {
+                                if (char.IsLetterOrDigit(matriz[i, l]))
+                                {
+                                    segundoOperando = matriz[i, l];
+                                    // Buscar el segundo operador
+                                    for (int m = l + 1; m < matriz.GetLength(1); m++)
+                                    {
+                                        if (Array.Exists(operadores, elem => elem == matriz[i, m]))
+                                        {
+                                            segundoOperador = matriz[i, m];
+                                            break;
+                                        }
+                                    }
+                                    break;
+                                }
+                            }
+
+                            if (operador == '=')
+                            {
+                                Console.WriteLine($"|   {instrCount++}   |   {segundoOperador}   |   {segundoOperando}  |  {tercerOperando}  |  T{tempCount}  |");
+                                Console.WriteLine($"|   {instrCount++}   |   =   |   T{tempCount}  |      |   {primerOperando}  |");
+                                tempCount++;
+                            }
+                            else
+                            {
+                                Console.WriteLine($"|   {instrCount++}   |   {operador}   |   {primerOperando}  |  {segundoOperando}  |  T{tempCount}  |");
+                               
+                                tempCount++;
+                            }
+                            matriz[i, k] = ' '; // Marcar el operador como espacio en blanco en la matriz
+
                             break;
                         }
                     }
-
-                    // Imprimir el cuádruplo
-                    Console.WriteLine($"|   {instrCount++}   |   {operador}   |   {primerOperando}  |  {segundoOperando}  |  T{temp}  |");
-
-                    // Incrementar el contador de temporales
-                    tempCount++;
                 }
                 // Si encontramos un THEN
                 else if (currentChar == '|')
                 {
                     // Imprimir el cuádruplo
                     Console.WriteLine($"|   {instrCount++}   |   GF   |  T{tempCount - 1}  |      |    |");
+                    matriz[i, j] = ' ';
                 }
             }
         }
     }
 }
+    
 
